@@ -1,0 +1,184 @@
+<div class="wrapper">
+  <header>
+    <div style="padding: 10px;">
+      <div class="p-grid">
+        <div class="p-col">
+          <div class="logo">
+            <img src="assets/img/logo.png" alt="...">  
+          </div>
+        </div>
+        <div class="p-col">
+          <app-auth></app-auth>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="main">
+    <p-toast [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"></p-toast>
+    <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+    <!-- Dialog template to view forecast in user history. -->
+    <p-dialog header="Weather forecast" [(visible)]="history_item_display" [modal]="true" 
+      [style]="{width:'700px'}" (value)="view_forecast" [draggable]="false" [resizable]="false">
+      <div *ngIf="view_forecast">
+        <div class="p-grid">
+          <div class="p-col-8">
+            <h1>{{view_forecast.forecast.main.temp}}°F</h1>                        
+            <h3 style="margin: 0;">{{view_forecast.forecast.name}}</h3>                    
+            <h4 style="margin: 0;">{{view_forecast.date}}</h4>
+            <h3 style="margin: 0;">({{view_forecast.forecast.weather[0].description}})</h3>
+            <div class="p-grid">
+              <div class="p-col-6" *ngIf="view_forecast.forecast.main">
+                <ul>
+                  <li>Feels like:&nbsp;{{view_forecast.forecast.main.feels_like}}°F</li>
+                  <li>Temp min:&nbsp;{{view_forecast.forecast.main.temp_min}}°F</li>
+                  <li>Temp max:&nbsp;{{view_forecast.forecast.main.temp_max}}°F</li>
+                  <li>Pressure:&nbsp;{{view_forecast.forecast.main.pressure}}</li>
+                  <li>Humidity:&nbsp;{{view_forecast.forecast.main.humidity}}</li>
+                </ul>
+              </div>
+              <div class="p-col-6" *ngIf="view_forecast.forecast.wind">
+                <ul>
+                  <li>Visibility:&nbsp;{{view_forecast.forecast.visibility}}</li>
+                  <li>Wind speed:&nbsp;{{view_forecast.forecast.wind.speed}}</li>
+                  <li>Wind deg:&nbsp;{{view_forecast.forecast.wind.deg}}</li>
+                  <li>Wind gust:&nbsp;{{view_forecast.forecast.wind.gust}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="p-col-4">
+            <div class="forecast_icon">
+              <img src="assets/img/{{view_forecast.forecast.weather[0].icon}}.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+
+    <!-- Main forecast template. -->
+    <div class="forecast">
+      <div ngDefaultControl class="forecast_field" [(ngModel)]="forecast">
+        <div class="p-grid" *ngIf="forecast; else MainLogo">
+          <div class="p-col">
+            <h1>{{forecast.main.temp}}°F</h1>                        
+            <h3 style="margin: 0;">{{forecast.name}}</h3>                    
+            <h3 style="margin: 0;">({{forecast.weather[0].description}})</h3>
+            <div class="p-grid">
+              <div class="p-col-6" *ngIf="forecast.main">
+                <ul>
+                  <li>Feels like:&nbsp;{{forecast.main.feels_like}}°F</li>
+                  <li>Temp min:&nbsp;{{forecast.main.temp_min}}°F</li>
+                  <li>Temp max:&nbsp;{{forecast.main.temp_max}}°F</li>
+                  <li>Pressure:&nbsp;{{forecast.main.pressure}}</li>
+                  <li>Humidity:&nbsp;{{forecast.main.humidity}}</li>
+                </ul>
+              </div>
+              <div class="p-col-6" *ngIf="forecast.wind">
+                <ul>
+                  <li>Visibility:&nbsp;{{forecast.visibility}}</li>
+                  <li>Wind speed:&nbsp;{{forecast.wind.speed}}</li>
+                  <li>Wind deg:&nbsp;{{forecast.wind.deg}}</li>
+                  <li>Wind gust:&nbsp;{{forecast.wind.gust}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="p-col">
+            <div class="forecast_icon">
+              <img src="assets/img/{{forecast.weather[0].icon}}.png" alt="">
+            </div>
+          </div>
+        </div>
+        <ng-template #MainLogo>
+          <img src="assets/img/logo.png" alt="..." class="forecast_alter">    
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Main request field. -->
+    <div class="input_field">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText placeholder="Search" class="p-inputtext-sm" 
+        [(ngModel)]="input_value" (keyup.enter)="input_field_click()"/>
+      </span>
+    </div>
+
+    <!-- User History Template. -->
+    <div class="history" *ngIf="user_auth_status">
+      <p-tabView>
+        <p-tabPanel header="My History">
+          <p-table [value]="forecast_history" [paginator]="true" [rows]="10" 
+            [rowsPerPageOptions]="[10,20,30]">
+            <ng-template pTemplate="caption">
+              <div class="table-header">
+                <div class="p-grid">
+                  <div class="p-col-7">
+                    <p-button label="Delete" (onClick)="historylist_delete_button_click()"
+                      [disabled]="historylist_delete_button_isactive"></p-button> 
+                  </div>
+                  <div class="p-col-5">
+                    <!-- History global filter. -->
+                    <span class="p-input-icon-right">
+                      <i class="pi pi-filter"></i>
+                      <input type="text" [(ngModel)]="filter_input_value" 
+                        (ngModelChange)="filter_history_by_input_data($event)" pInputText />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <p-checkbox (onChange)="historylist_selectall_checkbox_click()"
+                    [(ngModel)]="selected_all_history" [binary]="true"></p-checkbox>
+                </th>
+                <th pSortableColumn="date">Date<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="country">Country<p-sortIcon field="country"></p-sortIcon></th>
+                <th>Temp</th>
+                <th>Icon</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-history let-idx="rowIndex">
+              <tr class="p-selectable-row">
+                <td>
+                  <p-checkbox [value]="history" [(ngModel)]="selected_history"
+                    (onChange)="historylist_checkbox_click()"></p-checkbox>
+                </td>
+                <td>{{history.date}}</td>
+                <td>{{history.forecast.name}}</td>
+                <td>{{history.forecast.sys.country}}</td>
+                <td>{{history.forecast.main.temp}}°F</td>
+                <td>
+                  <p-avatar image="assets/img/{{history.forecast.weather[0].icon}}.png" 
+                    pBadge value="4" severity="danger" styleClass="mr-2" size="xlarge"></p-avatar>
+                </td>
+                <td>
+                  <button pButton type="button" class="p-button-secondary" 
+                    (click)="history_item_display_click(idx)" icon="pi pi-eye"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+
+        <p-tabPanel header="All History" *ngIf="is_superuser">
+          <app-allhistory></app-allhistory>
+        </p-tabPanel>
+
+        <p-tabPanel header="Users" *ngIf="is_superuser">
+          <app-allusers></app-allusers>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+  <footer>
+    <div class="description">
+      <p>Demo weather forecast app.</p>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,126 @@
+<!-- User authorization template. -->
+<p-dialog header="Login" [(visible)]="login_display" [modal]="true" 
+  [style]="{width: '400px'}" [draggable]="false" [resizable]="false">
+  <div class="grid p-fluid"> 
+    <div class="col-12 md:col-4" style="margin: 25px;">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+        <input type="username" pInputText placeholder="Username" [(ngModel)]="credentials.email">   
+      </div>
+    </div>
+    <div class="col-12 md:col-4" style="margin: 25px;">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+        <input type="password" pInputText placeholder="Password" [(ngModel)]="credentials.password"> 
+      </div>
+    </div>
+    <div class="col-12 md:col-4" style="margin: 25px;">
+      <div class="field-checkbox">
+        <p-checkbox (onChange)="credentials_checkbox_click()" [(ngModel)]="credentials_checkbox" 
+          (value)="credentials_checkbox" [binary]="true" inputId="binary"></p-checkbox>
+        <label style="margin: 0 10px">Save credentials.</label>
+      </div>
+    </div>
+    <div class="col-12 m-5 md:col-4">
+      <button pButton type="button" label="Ok" style="float: right; width:auto;" (click)="login()"></button>
+    </div>
+    <div class="col-12 m-5 md:col-4">
+      <a style="cursor: pointer;" (click)="show_registration_display()">Registration</a>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- User registration template. -->
+<p-dialog header="Registration" [(visible)]="registration_display" [modal]="true" 
+  [style]="{width: '400px'}" [draggable]="false" [resizable]="false">
+
+  <div style="margin: 0 50px;">
+     <h4>Email:</h4>
+    <input id="float-input-invalid" type="email" pInputText [(ngModel)]="registration_data.email"> 
+
+    <h4>Username:</h4>
+    <input type="username" pInputText [(ngModel)]="registration_data.username"> 
+
+    <h4>Password:</h4>
+    <input type="password" pInputText [(ngModel)]="registration_data.password" class="{{invalid_form_style}}"> 
+
+    <h4>Repit Password:</h4>
+    <input type="password" pInputText [(ngModel)]="repit_password" class="{{invalid_form_style}}"> 
+  </div>
+
+  <div>
+   <button pButton type="button" label="Ok" (click)="registration()" 
+     class="registr_button"></button>
+  </div>
+</p-dialog>
+
+<!-- Personal information template. -->
+<p-dialog header="Edit profile" [(visible)]="user_display" 
+  [draggable]="false" [style]="{'width': '430px'}" [resizable]="false" [modal]="true">
+  <button pButton pRipple type="button" icon="pi pi-pencil" style="float: right;"
+    class="p-button-rounded p-button-text" (click)="personal_information_edit()">
+  </button>
+  <div style="margin: 0 50px;">
+    <h4>User: {{user_profile.email}}</h4>
+    <div class="input_group">
+      <label for="input">Username:</label>
+      <input type="username" pInputText [(ngModel)]="user_profile.username" [disabled]="user_profile_edit"> 
+    </div>
+    <div class="input_group">
+      <label for="input">First name:</label>
+      <input type="text" pInputText [(ngModel)]="user_profile.first_name" [disabled]="user_profile_edit"> 
+    </div>
+    <div class="input_group">
+      <label for="input">Last name:</label>
+      <input type="text" pInputText [(ngModel)]="user_profile.last_name" [disabled]="user_profile_edit"> 
+    </div>
+    <a style="cursor: pointer;" class="input_group" (click)="change_password_click()">Change passwors</a>
+    <div *ngIf="change_password_display"> 
+      <div class="input_group">
+        <label for="input">New password:</label>
+        <div class="p-inputgroup">
+          <input type="{{password_is_visible.new_pswrd}}" [(ngModel)]="change_password_items.new_pswrd" 
+            pInputText placeholder="Keyword" class="{{password_input_error}}">         
+          <button type="button" pButton pRipple icon="pi pi-eye" styleClass="p-button-danger" 
+            (click)="new_password_is_visible_button_click()"></button> 
+        </div>
+      </div>
+      <div class="input_group">
+        <label for="input">Repit password:</label>
+        <div class="p-inputgroup">
+          <input type="{{password_is_visible.repit_pswrd}}" [(ngModel)]="change_password_items.repit_pswrd" 
+            pInputText placeholder="Keyword" class="{{password_input_error}}">         
+          <button type="button" pButton pRipple icon="pi pi-eye" styleClass="p-button-danger" 
+            (click)="repit_password_is_visible_button_click()"></button> 
+        </div>
+      </div>
+    </div>
+  
+    <a style="cursor: pointer;" (click)="delete_profile_button_click()" class="input_group">Delete profile</a>
+  </div>
+  <div style="margin: 50px 0">
+    <button pButton style="float: right;" type="button" label="Save" 
+      (click)="save_user_public_profile_button_click()" [disabled]="user_profile_save_button">
+    </button>
+  </div>
+</p-dialog>
+
+<!-- Auth button -->
+<div style="float: right;">
+  <div *ngIf="auth_status; else LoginButton">
+    <div class="p-grid">
+      <div class="p-col">
+        <h3>{{user_name}}</h3>
+      </div>
+      <div class="p-col">
+        <div style="display: flex; align-items: center; height: 60px;">
+          <p-menu #menu [popup]="true" [model]="dropdown_items"></p-menu>
+          <button type="button" pButton icon="pi pi-bars" (click)="menu.toggle($event)"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #LoginButton>
+    <a style="cursor: pointer;" (click)="show_login_display()">Login</a>
+  </ng-template>
+</div>

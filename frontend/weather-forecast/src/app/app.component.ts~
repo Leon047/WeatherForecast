@@ -1,0 +1,95 @@
+import { Component } from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
+import { ApiService } from './api.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.sass'],
+})
+
+export class AppComponent {
+
+  forecast: any;
+  input_value: string = '';
+
+  forecast_history: any[] = [];
+  user_auth_status: boolean = false;
+
+  // test
+  user_status: string = 'user';
+
+
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    public api: ApiService,
+  ) {
+  }
+
+  ngOnInit() {
+    this.primengConfig.ripple = true;
+    this.user_status_controler();
+  }
+
+  input_field_click(): void {
+    const auth_token = this.api.get_data_ls('auth_token');
+
+    if (this.input_value != '') {
+      if (auth_token) {
+        this.get_forecast_user();
+      } else {
+        this.get_forecast_gest(); 
+      }
+    }
+  }
+
+  get_forecast_gest(): void {
+    this.api.get_gest_forecast(this.input_value).subscribe(
+      (response: any) => {
+        this.input_value = '';
+        this.forecast = response;
+      },
+      (error: any) => {
+        this.api.show_error_message(error.message); 
+      }
+    );
+  }
+
+  get_forecast_user(): void {
+    const body = {'location': this.input_value}
+
+    this.api.request_post('user/', body).subscribe(
+      (response: any) => {
+        this.input_value = '';
+        this.forecast = response.forecast;
+        this.forecast_history.push({
+          'date': new Date(),
+          'forecast': this.forecast
+        });
+      },
+      (error: any) => {
+        this.api.show_error_message(error); 
+      }
+    );
+  }
+
+  user_status_controler(): void {
+    const auth_token = this.api.get_data_ls('auth_token') || false;
+
+    if (auth_token) {
+      this.get_user_history();
+      this.user_auth_status = true;
+    }
+  }
+
+  get_user_history(): void {
+    this.api.request_get('history').subscribe(
+      (response: any) => {
+        this.forecast_history = response;
+      },
+      (error: any) => {
+        console.error('There was an error!', error);
+      });
+  }
+  
+}

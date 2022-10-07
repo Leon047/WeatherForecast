@@ -1,0 +1,96 @@
+<!-- Dialog template to view All User forecast history. -->
+<p-dialog header="Weather forecast" [(visible)]="history_item_display" [modal]="true" 
+  [style]="{width:'700px'}" (value)="view_forecast" [draggable]="false" [resizable]="false">
+  <div *ngIf="view_forecast">
+    <div class="p-grid">
+      <div class="p-col-8">
+        <h1>{{view_forecast.forecast.main.temp}}°F</h1>                        
+        <h3 style="margin: 0;">{{view_forecast.forecast.name}}</h3>                    
+        <h4 style="margin: 0;">{{view_forecast.date}}</h4>
+        <h3 style="margin: 0;">({{view_forecast.forecast.weather[0].description}})</h3>
+        <div class="p-grid">
+          <div class="p-col-6" *ngIf="view_forecast.forecast.main">
+            <ul>
+              <li>Feels like:&nbsp;{{view_forecast.forecast.main.feels_like}}°F</li>
+              <li>Temp min:&nbsp;{{view_forecast.forecast.main.temp_min}}°F</li>
+              <li>Temp max:&nbsp;{{view_forecast.forecast.main.temp_max}}°F</li>
+              <li>Pressure:&nbsp;{{view_forecast.forecast.main.pressure}}</li>
+              <li>Humidity:&nbsp;{{view_forecast.forecast.main.humidity}}</li>
+            </ul>
+          </div>
+          <div class="p-col-6" *ngIf="view_forecast.forecast.wind">
+            <ul>
+              <li>Visibility:&nbsp;{{view_forecast.forecast.visibility}}</li>
+              <li>Wind speed:&nbsp;{{view_forecast.forecast.wind.speed}}</li>
+              <li>Wind deg:&nbsp;{{view_forecast.forecast.wind.deg}}</li>
+              <li>Wind gust:&nbsp;{{view_forecast.forecast.wind.gust}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-4">
+        <div class="forecast_icon">
+          <img src="assets/img/{{view_forecast.forecast.weather[0].icon}}.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- All user history display template. -->
+<p-table [value]="history_list" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]">
+  <ng-template pTemplate="caption">
+    <div class="table-header">
+      <div class="p-grid">
+        <div class="p-col-7">
+          <p-button label="Delete" (onClick)="historylist_delete_button_click()"
+            [disabled]="historylist_delete_button_isactive"></p-button> 
+        </div>
+        <div class="p-col-5">
+          <!-- History global filter. -->
+          <span class="p-input-icon-right">
+            <i class="pi pi-filter"></i>
+            <input type="text" [(ngModel)]="filter_input_value" 
+              (ngModelChange)="filter_history_by_input_data($event)" pInputText />
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-checkbox (onChange)="historylist_selectall_checkbox_click()"
+          [(ngModel)]="selected_all_history" [binary]="true"></p-checkbox>
+      </th>
+      <th pSortableColumn="date">Date<p-sortIcon field="date"></p-sortIcon></th>
+      <th pSortableColumn="user">User<p-sortIcon field="user"></p-sortIcon></th>
+      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="country">Country<p-sortIcon field="country"></p-sortIcon></th>
+      <th>Temp</th>
+      <th>Icon</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-history let-idx="rowIndex">
+    <tr class="p-selectable-row">
+      <td>
+        <p-checkbox [value]="history" [(ngModel)]="selected_history"
+          (onChange)="historylist_checkbox_click()"></p-checkbox>
+      </td>
+      <td>{{history.date}}</td>
+      <td>{{history.user}}</td>
+      <td>{{history.forecast.name}}</td>
+      <td>{{history.forecast.sys.country}}</td>
+      <td>{{history.forecast.main.temp}}°F</td>
+      <td>
+        <p-avatar image="assets/img/{{history.forecast.weather[0].icon}}.png" 
+          pBadge value="4" severity="danger" styleClass="mr-2" size="xlarge"></p-avatar>
+      </td>
+      <td>
+        <button pButton type="button" class="p-button-secondary" 
+          (click)="history_item_display_click(idx)" icon="pi pi-eye"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

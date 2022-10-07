@@ -1,0 +1,100 @@
+<!-- User personal information template. -->
+<p-dialog header="User: {{view_user.email}}" [(visible)]="user_display" [draggable]="false" 
+  [style]="{'width': '600px'}" [resizable]="false" [modal]="true">
+  <h4 style="cursor: default">Date joined: {{view_user.date_joined}}</h4>      
+  <button pButton pRipple type="button" icon="pi pi-pencil" style="float: right;"
+    class="p-button-rounded p-button-text" (click)="personal_information_edit()">
+  </button>
+  <div class="p-grid m-4">
+    <div class="p-col"> 
+      <div class="input_group">
+        <label for="input">Username:</label>
+        <input type="username" pInputText [(ngModel)]="view_user.username" 
+          [disabled]="user_information_edit"> 
+      </div>
+      <div class="input_group">
+        <label for="input">First name:</label>
+        <input type="text" pInputText [(ngModel)]="view_user.first_name" 
+          [disabled]="user_information_edit"> 
+      </div>
+      <div class="input_group">
+        <label for="input">Last name:</label>
+        <input type="text" pInputText [(ngModel)]="view_user.last_name" 
+          [disabled]="user_information_edit"> 
+      </div>
+    </div>
+    <div class="p-col">
+      <p-checkbox value="view_user.is_superuser" label="Is superuser:" [binary]="true" class="input_group"
+        [(ngModel)]="view_user.is_superuser" [disabled]="user_information_edit"></p-checkbox>
+
+      <p-checkbox value="view_user.is_staff" label="Is staff:" [binary]="true" class="input_group"
+        [(ngModel)]="view_user.is_staff" [disabled]="user_information_edit"></p-checkbox>
+
+      <p-checkbox value="view_user.is_active" label="Is active:" [binary]="true" class="input_group"
+        [readonly]="true" [(ngModel)]="view_user.is_active"></p-checkbox>
+    </div>
+  </div>
+  <h4 style="cursor: default">Last login: {{view_user.last_login}}</h4>
+  <div style="margin: 50px 0">
+    <button pButton style="float: right;" type="button" label="Save" 
+      (click)="save_user_profile()" [disabled]="user_information_edit"></button>
+  </div>
+</p-dialog>
+
+<!-- Users List template. -->
+<p-table [value]="users_list" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]">
+  <ng-template pTemplate="caption">
+    <div class="table-header">
+      <div class="p-grid">
+        <div class="p-col-7">
+          <p-button label="Delete" (onClick)="userslist_delete_button_click()"
+            [disabled]="userslist_delete_button_isactive"></p-button> 
+        </div>
+        <div class="p-col-5">
+          <!-- User global filter. -->
+          <span class="p-input-icon-right">
+            <i class="pi pi-filter"></i>
+            <input type="text" [(ngModel)]="filter_input_value" 
+              (ngModelChange)="filter_users_by_input_data($event)" pInputText/>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-checkbox (onChange)="userslist_selectall_checkbox_click()"
+          [(ngModel)]="selected_all_users" [binary]="true"></p-checkbox>
+      </th>
+      <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+      <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon></th>
+      <th pSortableColumn="is_superuser">Superuser<p-sortIcon field="is_superuser"></p-sortIcon></th>
+      <th pSortableColumn="is_staff">Staff<p-sortIcon field="is_staff"></p-sortIcon></th>
+      <th pSortableColumn="is_active">Active<p-sortIcon field="is_active"></p-sortIcon></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user let-idx="rowIndex">
+    <tr class="p-selectable-row">
+      <td>
+        <p-checkbox [value]="user" [(ngModel)]="selected_users"
+          (onChange)="userslist_checkbox_click()"></p-checkbox>
+      </td>
+      <td>{{user.id}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+      <td><p-checkbox [value]="user" [(ngModel)]="user.is_superuser" 
+          [readonly]="true" [binary]="true"></p-checkbox></td>
+      <td><p-checkbox [value]="user" [(ngModel)]="user.is_staff" 
+          [readonly]="true" [binary]="true"></p-checkbox></td>
+      <td><p-checkbox [value]="user" [(ngModel)]="user.is_active" 
+          [readonly]="true" [binary]="true"></p-checkbox></td>
+      <td>
+        <button pButton type="button" class="p-button-secondary" 
+          (click)="user_display_button_click(idx)" icon="pi pi-user"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
