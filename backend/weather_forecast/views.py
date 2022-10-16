@@ -66,6 +66,7 @@ class HistoryListView(APIView, PageNumberPagination):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        """Returns all history data."""
         queryset = HistoryModel.objects.all()
         serializer = HistorySerializer(queryset, many=True)
 
@@ -75,6 +76,7 @@ class HistoryListView(APIView, PageNumberPagination):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request):
+        """Returns the history of a single user."""
         auth_token = request.headers['Authorization'].replace('Token ', '')
         user = UserModel.objects.get(auth_token=auth_token)
         queryset = HistoryModel.objects.filter(user=user)
@@ -86,6 +88,7 @@ class HistoryListView(APIView, PageNumberPagination):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request):
+        """Takes a list of user history ids and removes them."""
         id_list = json.loads(request.body)['id_list']
         deleted_history = HistoryModel.objects.filter(id__in=id_list).delete()
 
@@ -99,12 +102,14 @@ class UserProfile(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        """Returns the user's personal data."""
         auth_token = request.headers['Authorization'].replace('Token ', '')
         user = UserModel.objects.get(auth_token=auth_token)
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        """Updates the user's personal data."""
         user = get_object_or_404(UserModel, email=request.data.get('email'))
         serializer = UserSerializer(user, data=request.data)
 
@@ -115,6 +120,7 @@ class UserProfile(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
+        """Deletes a user."""
         user_id = request.query_params.get('id')
         deleted_user = UserModel.objects.filter(id=user_id).delete()
 
@@ -154,6 +160,7 @@ class UserAdministration(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        """Returns a list of the user."""
         queryset = UserModel.objects.all()
         serializer = UserAdministrationSerializer(queryset, many=True)
 
@@ -163,6 +170,7 @@ class UserAdministration(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request):
+        """Updates the data of all users."""
         user = get_object_or_404(UserModel, email=request.data.get('email'))
         serializer = UserAdministrationSerializer(user, data=request.data)
 
@@ -173,6 +181,7 @@ class UserAdministration(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
+        """Gets a list of user ids and removes them."""
         id_list = json.loads(request.body)['id_list']
         deleted_obj = UserModel.objects.filter(id__in=id_list).delete()
 

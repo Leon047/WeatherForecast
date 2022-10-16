@@ -33,21 +33,16 @@
 
 ### Delete docker containers.
 
-# Del images:
+### Del images:
 * docker rmi $(docker images -a -q) 
 
-# del conteiners:
-docker rm $(docker ps -a -f status=exited -q)
+### Del conteiners:
+* docker rm $(docker ps -a -f status=exited -q)
 
 <hr>
 
 ### The project will start:
-
-### Backend 
-* http://127.0.0.1:8000/api/v1/admin/
-
-### Frontend
-* http://127.0.0.1:4000/
+* http://localhost:4000/
 
 <hr>
 
