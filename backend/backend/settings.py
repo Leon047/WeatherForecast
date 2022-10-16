@@ -90,14 +90,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# VENV: ('HOST': '127.0.0.1', 'PORT': '5432')
+# Docker: ('HOST': 'db', 'PORT': '5000')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'weather_forecast',
         'USER': 'root',
         'PASSWORD': 'abc123',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'HOST': 'db',
+        'PORT': '5000'
     }
 }
 

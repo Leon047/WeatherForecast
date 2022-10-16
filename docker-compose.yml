@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: wf_psql_db
+    expose:
+      - '5000'
+    ports:
+      - '5000:5000'
+    environment:
+      POSTGRES_DB: 'weather_forecast'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'abc123'
+    command: -p 5000
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/backend
+    container_name: wf_backend
+    ports:
+      - '8000:8000'
+    command: python manage.py runserver 0.0.0.0:8000 
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend/weather-forecast
+    container_name: wf_frontend
+    volumes:
+      - ./frontend/weather-forecast:/frontend
+    ports:
+      - '4000:4000'
+    command: npm start
