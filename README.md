@@ -2,17 +2,16 @@
 
 ## DEMO 
 
-### Used by:
+### The project uses
 * Backend: Django 3.2.9
 * Frontend: Angular 13.3.5
-
-### Requirements
+* PostgreSQL latest
 * Python 3.8.10
 * Node 18.1.0
 * Docker
 * Docker Compose
 
-### Uses ports:
+### Uses ports
 * Django      - 8000 
 * Angular     - 4000 
 * PostgreSQL  - 5000
@@ -24,7 +23,7 @@
 * Install Docker Compose: https://docs.docker.com/compose/install/
 
 ### For project deployment:
-* docker-compose build
+* docker-compose build --no-cache
 * docker-compose up   
 
 ### Apply migration and populate the database:
@@ -33,11 +32,16 @@
 
 ### Delete docker containers.
 
-### Del images:
+### Delete images:
 * docker rmi $(docker images -a -q) 
 
-### Del conteiners:
+### Delete conteiners:
 * docker rm $(docker ps -a -f status=exited -q)
+
+### Or
+
+### Delete all conteiners and images:
+* sudo docker system prune -a 
 
 <hr>
 

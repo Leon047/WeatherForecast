@@ -31,6 +31,9 @@ services:
     container_name: wf_frontend
     volumes:
       - ./frontend/weather-forecast:/frontend
+      - /frontend/node_modules
     ports:
       - '4000:4000'
     command: npm start
+    depends_on:
+      - backend
