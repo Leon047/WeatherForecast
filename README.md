@@ -1,8 +1,29 @@
 # WeatherForecast 
 
-## DEMO 
+> DEMO 
 
-### The project uses
+
+## Table of Contents
+
+- [Description](#description)
+- [Used](#used)
+- [Install](#install)
+- [Delete](#delete)
+- [Starts](#starts)
+
+
+## Description
+
+A website to get the weather forecast for the location name entered 
+and save it if you are an authorized user.
+
+
+## Used
+
+The project uses the openweather API.
+- [OpenWeather API](https://openweathermap.org/api)
+
+The project uses
 * Backend: Django 3.2.9
 * Frontend: Angular 13.3.5
 * PostgreSQL latest
@@ -11,54 +32,67 @@
 * Docker
 * Docker Compose
 
-### Uses ports
+Uses ports
 * Django      - 8000 
 * Angular     - 4000 
 * PostgreSQL  - 5000
 
-<hr>
 
-### Install Docker:
-* Install Docker: https://docs.docker.com/engine/install/
-* Install Docker Compose: https://docs.docker.com/compose/install/
+## Install 
 
-### For project deployment:
-* docker-compose build --no-cache
-* docker-compose up   
+- Install: [Docker](https://docs.docker.com/engine/install/)
+- Install: [Docker Compose](https://docs.docker.com/compose/install/)
 
-### Apply migration and populate the database:
-* sudo docker exec -it wf_backend python manage.py migrate
-* sudo docker exec -it wf_backend ./manage.py loaddata psql_dump.json
+For project deployment:
+```sh
+docker-compose build --no-cache
+```
+```sh
+docker-compose up
+```   
 
-### Delete docker containers.
+Apply migration and populate the database:
+```sh
+docker exec -it wf_backend python manage.py migrate
+```
+```sh
+docker exec -it wf_backend ./manage.py loaddata psql_dump.json
+```
 
-### Delete images:
-* docker rmi $(docker images -a -q) 
 
-### Delete conteiners:
-* docker rm $(docker ps -a -f status=exited -q)
+## Delete 
 
-### Or
+Delete images:
+```sh
+docker rmi $(docker images -a -q)
+```
 
-### Delete all conteiners and images:
-* sudo docker system prune -a 
+Delete conteiners:
+```sh
+docker rm $(docker ps -a -f status=exited -q)
+```
 
-<hr>
+Or
 
-### The project will start:
-* http://localhost:4000/
+Delete all conteiners and images:
+```sh
+docker system prune -a
+``` 
 
-<hr>
 
-### Testing data
-User credential data for different type of users
+## Starts
 
-### Admin
+The project will start:
+- [WeatherForecast](http://localhost:4000/)
+
+Testing
+> User credential data for different type of users
+
+Admin:
 * login:    root@gmail.com
 * password: 12345
 
-### User
+User:
 * login:    user@gmail.com
 * password: 12345
 
-<hr>
