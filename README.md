@@ -20,19 +20,16 @@ and save it if you are an authorized user.
 
 ## Used
 
-The project uses the openweather API.
+[![Python](https://img.shields.io/static/v1?label=Python&message=v3.8.10&color=00CC11)](https://www.python.org/downloads/release/python-3811/)
+[![Django](https://img.shields.io/static/v1?label=Django&message=v3.2.9&color=D75627)](https://docs.djangoproject.com/en/4.1/releases/3.2.9/)
+[![Angular](https://img.shields.io/static/v1?label=Angular&message=v13.3.5&color=FF1300)](https://angular.io/start)
+[![Node](https://img.shields.io/static/v1?label=Node&message=v18.1.0&color=D7E726)](https://nodejs.org/en/)
+[![PostgreSQL](https://img.shields.io/static/v1?label=PostgreSQL&message=vlatest&color=007DD1)](https://www.postgresql.org/)
+
+API:
 - [OpenWeather API](https://openweathermap.org/api)
 
-The project uses
-* Backend: Django 3.2.9
-* Frontend: Angular 13.3.5
-* PostgreSQL latest
-* Python 3.8.10
-* Node 18.1.0
-* Docker
-* Docker Compose
-
-Uses ports
+Ports:
 * Django      - 8000 
 * Angular     - 4000 
 * PostgreSQL  - 5000
