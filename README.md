@@ -8,7 +8,6 @@
 - [Description](#description)
 - [Used](#used)
 - [Install](#install)
-- [Delete](#delete)
 - [Starts](#starts)
 
 
@@ -24,7 +23,7 @@ and save it if you are an authorized user.
 [![Django](https://img.shields.io/static/v1?label=Django&message=v3.2.9&color=D75627)](https://docs.djangoproject.com/en/4.1/releases/3.2.9/)
 [![Angular](https://img.shields.io/static/v1?label=Angular&message=v13.3.5&color=FF1300)](https://angular.io/start)
 [![Node](https://img.shields.io/static/v1?label=Node&message=v18.1.0&color=D7E726)](https://nodejs.org/en/)
-[![PostgreSQL](https://img.shields.io/static/v1?label=PostgreSQL&message=vlatest&color=007DD1)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/static/v1?label=PostgreSQL&message=latest&color=007DD1)](https://www.postgresql.org/)
 
 API:
 - [OpenWeather API](https://openweathermap.org/api)
@@ -36,45 +35,32 @@ Ports:
 
 
 ## Install 
+For project deployment:
 
 - Install: [Docker](https://docs.docker.com/engine/install/)
 - Install: [Docker Compose](https://docs.docker.com/compose/install/)
 
-For project deployment:
+Build docker containers:
 ```sh
 docker-compose build --no-cache
 ```
+
+Run project:
 ```sh
 docker-compose up
 ```   
 
-Apply migration and populate the database:
+Populate the project database:
+
+1)Apply migrations:
 ```sh
 docker exec -it wf_backend python manage.py migrate
 ```
+
+2)Upload dump to database:
 ```sh
 docker exec -it wf_backend ./manage.py loaddata psql_dump.json
 ```
-
-
-## Delete 
-
-Delete images:
-```sh
-docker rmi $(docker images -a -q)
-```
-
-Delete conteiners:
-```sh
-docker rm $(docker ps -a -f status=exited -q)
-```
-
-Or
-
-Delete all conteiners and images:
-```sh
-docker system prune -a
-``` 
 
 
 ## Starts
@@ -82,8 +68,8 @@ docker system prune -a
 The project will start:
 - [WeatherForecast](http://localhost:4000/)
 
-Testing
-> User credential data for different type of users
+## Testing
+User credential data for different type of users.
 
 Admin:
 * login:    root@gmail.com
@@ -92,4 +78,3 @@ Admin:
 User:
 * login:    user@gmail.com
 * password: 12345
-
